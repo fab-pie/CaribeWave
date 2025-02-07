@@ -1,0 +1,19 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    font-size: 16px; /* Taille de la police */
+    background-color: #007F7E; /* Couleur du texte */
+}
+
+#banner {
+    background-color: #ffffff; /* Couleur de fond de la banderole */
+    color: rgb(127, 8, 167); /* Couleur du texte */
+    text-align: center; /* Centrer le texte */
+    padding: 15px; /* Espacement intérieur */
+    font-size: 50px; /* Taille de la police */
+    border-radius: 0 0 30px 30px; /* Arrondi des bords */
+}
+
+#map {
+    height: 1000px; /* Hauteur de la carte */
+}
