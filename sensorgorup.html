@@ -23,14 +23,11 @@
   <script>
     // Initialize the map and set its view to Guadeloupe
     const map = L.map('map').setView([16.265, -61.551], 8.5); // Guadeloupe's coordinates
-
-    // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Custom icon for sensor markers
     const LeafIcon = L.Icon.extend({
       options: {
         iconAnchor: [16, 32], // Center the icon horizontally
@@ -39,11 +36,8 @@
     });
 
     const sensorIcon = new LeafIcon({ iconUrl: 'sealvl_sensor.png', iconSize: [15, 15] }); // Sensor icon
-
-    // Custom icon for aircraft markers
     const aircraftIcon = new LeafIcon({ iconUrl: 'leaf-avion.png', iconSize: [15, 15] }); // Aircraft icon
 
-    // Function to fetch and parse CSV data for sensors
     async function loadCsvAndAddSensorMarkers() {
       try {
         const response = await fetch('sensors.csv');
@@ -51,16 +45,10 @@
           throw new Error(`Error fetching CSV: ${response.statusText}`);
         }
         const csvText = await response.text();
-
-        // Parse CSV data
         const rows = csvText.trim().split('\n');
         rows.forEach(row => {
           const [Start, Latitude, Longitude, Code, Number, Timestamp] = row.split(';');
-
-          // Add sensor marker to the map
           const marker = L.marker([parseFloat(Latitude), parseFloat(Longitude)], { icon: sensorIcon }).addTo(map);
-
-          // Set popup content with the sensor details
           marker.bindPopup(`
             <strong>Name:</strong> ${Code}<br>
             <strong>Sea level:</strong> ${Number}<br>
@@ -72,7 +60,7 @@
       }
     }
 
-    // Function to fetch and parse CSV data for aircraft
+
     async function loadCsvAndAddAircraftMarkers() {
       try {
         const response = await fetch('aircrafts.csv'); // Updated to 'aircrafts.csv'
@@ -80,16 +68,10 @@
           throw new Error(`Error fetching CSV: ${response.statusText}`);
         }
         const csvText = await response.text();
-
-        // Parse CSV data
         const rows = csvText.trim().split('\n');
         rows.forEach(row => {
           const [Status, FlightID, Registration, Latitude, Longitude, Altitude, Speed, AircraftType, Timestamp] = row.split(',');
-
-          // Log the parsed data for debugging
           console.log(`Parsed Aircraft Data: ${FlightID}, ${Latitude}, ${Longitude}`);
-
-          // Create a custom icon with rotation
           const angle = parseFloat(Speed); // Assuming Speed is the angle in degrees
           const icon = L.divIcon({
             className: 'rotated-icon',
@@ -97,11 +79,7 @@
             iconSize: [15, 15],
             iconAnchor: [7.5, 15] // Center the icon
           });
-
-          // Add aircraft marker to the map
           const marker = L.marker([parseFloat(Latitude), parseFloat(Longitude)], { icon: icon }).addTo(map);
-
-          // Set popup content with the aircraft details
           marker.bindPopup(`
             <strong>Flight ID:</strong> ${FlightID}<br>
             <strong>Registration:</strong> ${Registration}<br>
@@ -115,8 +93,6 @@
         console.error('Error loading or parsing aircraft CSV:', error);
       }
     }
-
-    // Load CSV and add markers
     loadCsvAndAddSensorMarkers();
     loadCsvAndAddAircraftMarkers();
   </script>
